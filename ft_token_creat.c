@@ -1,17 +1,17 @@
 #include "ft_malloc.h"
 
-void *lst_clear_token(t_list *head)
+void lst_clear_token(t_list **head)
 {
     if(!head)
-        return(NULL);
+        return ;
     t_list *tmp;
-    tmp = head->next;
-    while (head)
+    tmp = (*head)->next;
+    while (*head)
     {
         if (tmp)
             tmp = tmp->next;
-        free(head->content);
-        free(head);
+        free((*head)->content);
+        free(*head);
     }
 }
 
@@ -21,26 +21,30 @@ t_shell *lst_new_token(char *str)
 
     if (!str)
         return (NULL);
-    new = ft_malloc(sizeof(t_list), SOME_LIST);
+    new = ft_malloc(sizeof(t_shell), SOME_LIST);
     if (!new)
         return (NULL);
-    ft_memset(new, 0, sizeof(new));
     new->value = str;
+    new->next = NULL;
+    new->previous = NULL;
     return (new);
 }
 
-void *add_token_back(t_shell **head, t_shell *new)
+void  add_token_back(t_shell **head, t_shell *new)
 {
-    t_shell *tmp;
-    
-    if (!new)
-        return (NULL);
-    if (!*head)
-        return (*head = new, new);
-    tmp = *head;
-    while (tmp->next)
-        tmp = tmp->next;
-    tmp->next = new;
-    new->previous = tmp;
-    return (tmp);
+  t_shell *tmp;
+
+  if (!head || !new)
+    return ;
+  if (!*head)
+  {
+    *head = new;
+    return ;
+  }
+  tmp = *head;
+  while (tmp->next)
+    tmp = tmp->next;
+  tmp->next = new;
+  new->previous = tmp;
+  new->next = NULL;
 }

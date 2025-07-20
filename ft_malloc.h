@@ -2,12 +2,13 @@
 # define FT_MALLOC_H
 
 # include <stdlib.h>
-#include <unistd.h>
- #include <readline/readline.h>
- #include <readline/history.h>
+# include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <stdio.h>
+# include "./libft/libft.h"
 
-# define ENV_LIST 1
+# define ENV_LIST 3
 # define SOME_LIST 2
 
 
@@ -20,8 +21,7 @@ typedef enum e_token
     DELEMITER,
     FILENAME,
     RED_APPEND,
-    WORD,
-    INVALID
+    WORD
 }t_token;
 
 typedef struct s_shell
@@ -39,9 +39,9 @@ typedef struct s_list{
 } t_list;
 
 void *ft_malloc(size_t size, int flag);
-t_list *ft_global(t_list *ptr, int flag);
+t_list **ft_global(t_list **ptr, int flag);
 t_list *ft_lstnew(void *ptr);
-void *ft_lstadd_front(t_list **head, t_list *new);
+void *ft_lst_add_back(t_list **head, t_list *new);
 void  ft_clean_up(void);
 void ft_free_all(int flag);
 void ft_free(void *ptr, int flag);
@@ -52,10 +52,11 @@ void syntax_opp_error(char *str, int size);
 void syntax_qot_error(char qot);
 int tokenization(t_shell *head);
 int    ft_isspace(char k);
-void *add_token_back(t_shell **head, t_shell *new);
+void  add_token_back(t_shell **head, t_shell *new);
 t_shell *lst_new_token(char *str);
-void lst_clear_token(t_shell **head);
+void lst_clear_token(t_list **head);
 int    ft_strcmp(char *s1, char *s2);
 int word(char *str, t_shell **head);
 
+void  print_list(t_shell *list);
 #endif

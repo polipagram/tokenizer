@@ -36,38 +36,38 @@ int pipe_error(int flag, char *str)
 
 int tokenization(t_shell *head)
 {
-    while (head)
+  while (head)
+  {
+    if (*(head->value) == '|')
     {
-        if (*(head->value) == '|')
-        {
-            if (!(head->next) || !(head->previous))
-                return (pipe_error(1, NULL));
-            else if (*(head->value + 1) != '\0')
-                return (pipe_error(2, head->value));
-            else if (head->previous && head->previous->kind == PIPE)
-                return (pipe_error(1, NULL));
-            else
-                head->kind = PIPE;
-        }
-        else if (*(head->value) == '>' || *(head->value) == '<')
-        {
-                if (!(head->next))
-                    return (redi_error("new line"));
-                else
-                    head->kind = redi_set(head->value);
-        }
-        else
-            head->kind = WORD;
-        if (head->previous && (head->previous->kind != WORD && head->previous->kind != PIPE))
-        {
-            if (head->kind != WORD)
-                redi_error(head->value);
-            else if (head->previous->kind == HEREDOC)
-                head->kind = DELEMITER;
-            else 
-                head->kind = FILENAME;
-        }
-        head = head->next;
+      if (!(head->next) || !(head->previous))
+        return (pipe_error(1, NULL));
+      else if (*(head->value + 1) != '\0')
+        return (pipe_error(2, head->value));
+      else if (head->previous && head->previous->kind == PIPE)
+        return (pipe_error(1, NULL));
+      else
+        head->kind = PIPE;
     }
-    return(0);
+    else if (*(head->value) == '>' || *(head->value) == '<')
+    {
+      if (!(head->next))
+        return (redi_error("new line"));
+      else
+        head->kind = redi_set(head->value);
+    }
+    else
+    head->kind = WORD;
+    if (head->previous && (head->previous->kind != WORD && head->previous->kind != PIPE && head->previous->kind != FILENAME && head->previous->kind != DELEMITER))
+    {
+      if (head->kind != WORD)
+        redi_error(head->value);
+      else if (head->previous->kind == HEREDOC)
+        head->kind = DELEMITER;
+      else 
+        head->kind = FILENAME;
+    }
+    head = head->next;
+  }
+  return(0);
 }

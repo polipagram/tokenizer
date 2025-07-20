@@ -1,12 +1,11 @@
 #include "ft_malloc.h"
-
 int qots_check(char *str)
 {
 	int i;
 	char c;
 
 	i = 0;
-	while (!ft_isspace(str[i]) && (str[i] != '<' && str[i] != '>' && str[i] != '|'))
+	while (str[i] && !ft_isspace(str[i]) && (str[i] != '<' && str[i] != '>' && str[i] != '|'))
 	{
 		if (str[i] == '\"' || str[i] == '\'')
 		{
@@ -42,7 +41,7 @@ char *ft_copy(char *str, int *i, int size)
 	if (!dest)
 		return (perror("minishell"), ft_free_all(SOME_LIST), NULL);
 	j = 0;
-	while (j < size)
+	while (j < size - 1)
 	{
 		dest[j] = str[*i];
 		(*i)++;
@@ -75,12 +74,11 @@ int word(char *str, t_shell **head)
 {
 	int i;
 	int size;
-
-	head = NULL;
 	i = 0;
 	while (str[i])
 	{
-		while (ft_isspace(str[i++]));
+		while (ft_isspace(str[i]))
+      i++;
 		if (str[i] == '>' || str[i] == '<' || str[i] == '|')
 		{
 			size = opperators_check(str + i);
@@ -93,16 +91,12 @@ int word(char *str, t_shell **head)
 			if (size < 0)
 				return (syntax_qot_error(size), -1);
 		}
-		if (!add_token_back(head, lst_new_token(ft_copy(str, &i, size + 1))))
-			{
-				printf("allo");
-				return(-1);
-				// return (lst_clear_token(*head), NULL);
-			}
-	}
-    if (tokenization(*head) == -1)
+    add_token_back(head, lst_new_token(ft_copy(str, &i, size + 1)));
+    printf ("hell\n");
+  }
+  if (tokenization(*head) == -1)
 	{
-        return (ft_free_all(SOME_LIST), -1);
+    return (ft_free_all(SOME_LIST) ,-1);
 	}
 	return(0);
 }

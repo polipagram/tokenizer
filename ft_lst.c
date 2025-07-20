@@ -13,17 +13,23 @@ t_list *ft_lstnew(void *ptr)
     return(new);
 }
 
-void *ft_lstadd_front(t_list **head, t_list *new)
+
+void  *ft_lst_add_back(t_list **head, t_list *new)
 {
-    if(!new)
-        return (NULL);
-    if(!*head)
-    {
-        *head = new;
-        return (*head);
-    }
-    new->next = *head;   
-    (*head)->previous = new;
-    (*head) = (*head)->previous;
-    return (*head);
+  t_list *tmp;
+
+  if (!head || !new)
+    return (NULL);
+  if (!*head)
+  {
+    *head = new;
+    return (new);
+  }
+  tmp = *head;
+  while (tmp->next)
+    tmp = tmp->next;
+  tmp->next = new;
+  new->previous = tmp;
+  new->next = NULL;
+  return (tmp);
 }
